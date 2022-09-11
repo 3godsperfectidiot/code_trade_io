@@ -1,9 +1,10 @@
-import 'package:code_trade_io/controller/provider/about_provider.dart';
-import 'package:code_trade_io/controller/utils/routes.dart';
-import 'package:code_trade_io/view/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import './controller/provider/about_provider.dart';
+import './controller/utils/routes.dart';
+import './view/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
