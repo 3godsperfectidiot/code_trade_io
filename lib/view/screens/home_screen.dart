@@ -1,11 +1,13 @@
-import 'package:code_trade_io/view/widgets/about/about_builder.dart';
-import 'package:code_trade_io/view/widgets/custom/my_error_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../controller/provider/about_provider.dart';
 import '../../model/about_model.dart';
+import 'textfields/search_text_field_prefix.dart';
+import 'error_screen.dart';
+import '../widgets/about/about_builder.dart';
 import '../widgets/custom/my_center_loader.dart';
 import '../widgets/custom/my_custom_toast.dart';
+import '../widgets/custom/my_loader.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,7 +17,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   bool _isLoading = true, _isError = false;
+
   late AboutModel _aboutData;
 
   @override
@@ -41,17 +46,54 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _searchController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
     return _isLoading
         ? const MyCenterLoader()
         : _isError
-            ? MyErrorWidget(refreshFunction: _initMethod)
+            ? ErrorScreen(refreshFunction: _initMethod)
             : Scaffold(
-                appBar: AppBar(title: Text(_aboutData.title)),
+                appBar: AppBar(
+                  toolbarHeight: 125,
+                  title: Column(
+                    children: [
+                      Text(_aboutData.title),
+                      const SizedBox(height: 15),
+                      SizedBox(
+                        width: width < 450 ? double.infinity : width / 1.25,
+                        child: SearchTextFieldPrefix(
+                          prefix: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.search),
+                            iconSize: 24,
+                            color: const Color(0XFF0B5A47),
+                          ),
+                          func: _search,
+                          controller: _searchController,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 body: RefreshIndicator(
                   onRefresh: _initMethod,
                   child: const AboutBuilder(),
                 ),
               );
+  }
+}
+
+extension _SearchMethods on _HomeScreenState {
+  void _search(String val) async {
+    showLoader(context);
+    AboutProvider.aboutProviderInstanace.searchData(val).then(
+          (_) => Navigator.pop(context),
+        );
   }
 }

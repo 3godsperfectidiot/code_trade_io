@@ -1,11 +1,19 @@
-import 'package:code_trade_io/model/about_model.dart';
-import 'package:code_trade_io/view/widgets/custom/my_image.dart';
 import 'package:flutter/material.dart';
+
+import '../../../model/about_model.dart';
+import '../custom/my_image.dart';
 
 class AboutCard extends StatelessWidget {
   final AboutRow about;
+  final bool isList;
+  final double width;
 
-  const AboutCard({super.key, required this.about});
+  const AboutCard({
+    super.key,
+    required this.about,
+    required this.isList,
+    required this.width,
+  });
 
   @override
   Card build(BuildContext context) => Card(
@@ -35,7 +43,10 @@ class AboutCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: MyImage(about.imageUrl, height: 300),
+                    child: MyImage(
+                      about.imageUrl,
+                      height: width / (isList ? 1.65 : 3),
+                    ),
                   ),
                 )
             ],

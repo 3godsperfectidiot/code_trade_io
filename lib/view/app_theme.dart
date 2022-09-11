@@ -113,7 +113,7 @@ ThemeData appTheme() => ThemeData(
       textTheme: const TextTheme(
         headline1: TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 28),
-        headline2: TextStyle(color: Color(0XFFB1B7C3), fontSize: 14),
+        headline2: TextStyle(color: mainColor, fontSize: 20),
         headline3: TextStyle(color: Colors.black, fontSize: 14),
         headline4: TextStyle(color: Color(0XFF345251), fontSize: 14),
         headline5: TextStyle(

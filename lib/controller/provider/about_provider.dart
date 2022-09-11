@@ -17,6 +17,7 @@ class AboutProvider with ChangeNotifier {
   final APIManager _apiManager = APIManager.apiManagerInstanace;
 
   late AboutModel _aboutData;
+  List<AboutRow> _aboutRows = [];
 
   // Getters
   AboutModel get getAboutData => _aboutData;
@@ -27,9 +28,22 @@ class AboutProvider with ChangeNotifier {
         await _apiManager.apiRequest(_apiUrl, APIMethod.get);
     if (apiResponse.status) {
       _aboutData = AboutModel.fromJson(apiResponse.data);
+      _aboutRows = _aboutData.rows;
       notifyListeners();
     } else {
       throw HttpException(apiResponse.error!.description);
     }
+  }
+
+  // Search Method
+  Future<void> searchData(String searchValue) async {
+    if (searchValue.isNotEmpty) {
+      final searchResult = _aboutData.rows.where((element) =>
+          element.title.toLowerCase().contains(searchValue.toLowerCase()));
+      _aboutData.rows = searchResult.toList();
+    } else {
+      _aboutData.rows = _aboutRows;
+    }
+    notifyListeners();
   }
 }
